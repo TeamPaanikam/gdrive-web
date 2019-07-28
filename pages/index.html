@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        GDrive Web
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        .outer {
+            display: table;
+            position: absolute;
+            top: auto;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .middle {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .inner {
+            margin-left: auto;
+            margin-right: auto;
+            width: auto;
+            /*whatever width you want*/
+        }
+    </style>
+
+
+</head>
+
+<body class="bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">GDrive Web</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    </nav>
+
+    <div class="outer">
+        <div class="middle">
+            <div class="inner">
+                <image style="margin-left:auto; margin-right:auto; width:auto; display:block;" class="bg-light"
+                    src="./assests/img/logo.svg" width=200px height=200px>
+                </image>
+                <div style="width: 100%; margin-left: 36%; margin-top: 15px;">
+                    <form id="url" method="POST" action="/addTorrent">
+                        <div class="form-row">
+                            <input type="text" name ="torrentId" id="torrentId" class="form-control " style="width: 25%" placeholder="Magnet Link Here">
+                            <button type="button" onclick="onSubmit()" style="margin-left: 10px;"
+                                class="btn btn-light">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./assests/js/torrent.js"></script>
+
+</body>
+
+</html>

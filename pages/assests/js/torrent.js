@@ -2,7 +2,7 @@ var torrentState;
 function onSubmit() {
     var torrentId = document.getElementById("torrentId").value
     localStorage.setItem("torrentId", torrentId)
-    document.getElementById("torrentForm").submit();
+    document.getElementById("url").submit();
 }
 
 function fetchState() {

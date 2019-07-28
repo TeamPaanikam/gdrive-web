@@ -1,9 +1,10 @@
 const webTorrent = require('webtorrent');
 const client = new webTorrent();
 
-exports.addTorrent = (torrentId) => {
+exports.addTorrent = async (torrentId) => {
     var status = false
-    client.add(torrentId, { path: "/tmp/downloads" }, function (addedTorrent) {
+    /* TODO : check for duplicate torrent, node process gets killed if a duplicate torrent is passed" */
+    await client.add(torrentId, { path: "./downloads" }, function (addedTorrent) {
         console.log("Torrent added successfully : " + addedTorrent.magnetURI)
         status = true
     })
@@ -11,7 +12,7 @@ exports.addTorrent = (torrentId) => {
 }
 
 exports.torrentState = (torrentId) => {
-    var torrent = clients.get(torrentId); 
+    var torrent = client.get(torrentId); 
     return new Promise((resolve, reject) => {
         if(!torrent){
             resolve({
