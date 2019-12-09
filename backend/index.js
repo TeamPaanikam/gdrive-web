@@ -17,8 +17,19 @@ app.use(express.static(path.join(__dirname,'pages')));
 
 app.post("/fetchTorrentState", (req,res) =>{
     /* We'd make this request from the front end, for every say, 1 second */
+    // console.log(req.body);
     var torrentState = torrent.torrentState(req.body.torrentId)      
-    res.json(torrentState);            
+    console.log(torrentState);
+    torrentState.then(() =>{
+        res.send(torrentState)
+    }, ()=>{
+        console.log("Error aa gaya ");
+    })
+    .catch( () =>{
+        console.log("Okay")
+    })
+    res.json(torrentState);
+
 })
 
 app.post('/addTorrent', (req, res)=> {

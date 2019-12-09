@@ -11,8 +11,10 @@ exports.addTorrent = async (torrentId) => {
     return status;
 }
 
-exports.torrentState = (torrentId) => {
+exports.torrentState =  (torrentId) => {
+    // console.log("torrentID - " + torrentId);
     var torrent = client.get(torrentId); 
+    console.log("torrent - "+ torrent);
     return new Promise((resolve, reject) => {
         if(!torrent){
             resolve({
@@ -21,7 +23,9 @@ exports.torrentState = (torrentId) => {
                 status : "not found"
             })
         }
-        torrent.on("error", () => {
+
+        torrent.on('error', () => {
+            console.log("err");
             resolve({
                 info : null,
                 status : 'error',
@@ -29,6 +33,17 @@ exports.torrentState = (torrentId) => {
             })
         })
         torrent.on('metadata', () => {
+            console.log("meta");
+
+            resolve({
+                info: null,
+                status : 'metadata',
+                error : false
+            })
+        })
+        torrent.on('infoHash', () => {
+            console.log("infH");
+
             resolve({
                 info: null,
                 status : 'metadata',
@@ -36,6 +51,8 @@ exports.torrentState = (torrentId) => {
             })
         })
         torrent.on('ready', () => {
+            console.log("ready");
+
             resolve({
                 info : null,
                 status : "ready",
@@ -43,18 +60,34 @@ exports.torrentState = (torrentId) => {
             })
         })
         torrent.on('done', () => {
+            console.log("Done");
+
             resolve({
                 info : fetchInfo(torrentId),
                 status : "done",
                 error : false
             })
         })
+        torrent.on('noPeers', () =>{
+            console.log("noPEer");
+
+            resolve({
+                info: fetchInfo(torrentId), 
+                status: "No Peers",
+                error: true
+            })
+        })
         torrent.on('download', () =>{
+            console.log("Donwliad");
+            console.log(fetchInfo(torrentId))
+
             resolve({
                 info : fetchInfo(torrentId),
                 status : "downloading",
                 error : false
             })
+            
+        return;
         })
     })
 }
