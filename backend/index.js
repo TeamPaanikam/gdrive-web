@@ -1,11 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path')
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8000;
 
 const torrent = require('./util/Torrent');
-
+app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json())
@@ -17,18 +18,10 @@ app.use(express.static(path.join(__dirname, 'pages')));
 
 app.post("/fetchTorrentState", async(req, res) => {
     /* We'd make this request from the front end, for every say, 1 second */
-    // console.log(req.body);
+    console.log(req.body);
     var torrentState = await torrent.torrentState(req.body.torrentId)
     console.log("from index.js" );
     console.log(torrentState);
-    // torrentState.then(() => {
-    //     res.send(torrentState)
-    // }, () => {
-    //     console.log("Error aa gaya ");
-    // })
-    //     .catch(() => {
-    //         console.log("Okay")
-    //     })
     res.json(torrentState);
 })
 

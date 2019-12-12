@@ -4,17 +4,21 @@ const client = new webTorrent();
 exports.addTorrent = async (torrentId) => {
     var status = false
     /* TODO : check for duplicate torrent, node process gets killed if a duplicate torrent is passed" */
-    await client.add(torrentId, { path: "./downloads" }, function (addedTorrent) {
-        console.log("Torrent added successfully : " + addedTorrent.magnetURI)
-        status = true
-    })
+    var torr = client.get(torrentId);
+    if (torr) {
+        console.log("Duplicate torrent ");
+        status = false;
+    }
+    else {
+        await client.add(torrentId, { path: "./downloads" }, function (addedTorrent) {
+            console.log("Torrent added successfully : " + addedTorrent.magnetURI)
+            status = true;
+        })
+    }
     return status;
 }
-
 exports.torrentState = (torrentId) => {
-
     var torrent = client.get(torrentId);
-    // console.log(torrent);
     return new Promise((resolve, reject) => {
         if (!torrent) {
             resolve({
@@ -23,7 +27,6 @@ exports.torrentState = (torrentId) => {
                 status: "not found"
             });
         }
-
         function dwndin() {
             resolve(
                 {
@@ -33,7 +36,6 @@ exports.torrentState = (torrentId) => {
                 }
             );
         }
-
         function error() {
             resolve({
                 info: null,
@@ -41,7 +43,6 @@ exports.torrentState = (torrentId) => {
                 error: true
             });
         }
-
         function metadata() {
             resolve({
                 info: null,
@@ -49,7 +50,6 @@ exports.torrentState = (torrentId) => {
                 error: false
             });
         }
-
         function ready() {
             resolve({
                 info: null,
@@ -64,7 +64,6 @@ exports.torrentState = (torrentId) => {
                 error: false
             });
         }
-
         function nopeers() {
             resolve({
                 info: fetchInfo(torrentId),
@@ -72,14 +71,12 @@ exports.torrentState = (torrentId) => {
                 error: true
             });
         }
-
         torrent.on('download', dwndin);
         torrent.on('error', error);
         torrent.on('metadata', metadata);
         torrent.on('ready', ready);
         torrent.on('done', done);
         torrent.on('noPeers', nopeers);
-
     })
 }
 
@@ -97,7 +94,7 @@ function fetchInfo(torrentId) {
         }
         var torrentStatus = {
             'files': fileArr,
-            'progress': torrent.progress,
+            'progress': torrent.progress * 100,
             'downloadSpeed': torrent.downloadSpeed,
             'peers': torrent.numPeers,
             'ratio': torrent.ratio,

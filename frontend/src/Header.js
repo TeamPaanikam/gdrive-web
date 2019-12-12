@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -20,7 +19,8 @@ class Header extends Component {
                         <Typography variant="h6" >
                             GDrive Web
                         </Typography>
-                        <Button style = {{marginLeft :"auto", marginRight: "5px"}} color="inherit">Login</Button>
+                        {/* <Link to={{pathname: '/status'}}>Status</Link> */}
+                        <Button style={{marginLeft :"auto", marginRight: "5px"}} color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>
 
