@@ -15,21 +15,21 @@ app.use(express.static(path.join(__dirname, 'pages')));
 
 /* --------------------------   TORRENTS  --------------------------- */
 
-app.post("/fetchTorrentState", (req, res) => {
+app.post("/fetchTorrentState", async(req, res) => {
     /* We'd make this request from the front end, for every say, 1 second */
     // console.log(req.body);
-    var torrentState = torrent.torrentState(req.body.torrentId)
+    var torrentState = await torrent.torrentState(req.body.torrentId)
+    console.log("from index.js" );
     console.log(torrentState);
-    torrentState.then(() => {
-        res.send(torrentState)
-    }, () => {
-        console.log("Error aa gaya ");
-    })
-        .catch(() => {
-            console.log("Okay")
-        })
+    // torrentState.then(() => {
+    //     res.send(torrentState)
+    // }, () => {
+    //     console.log("Error aa gaya ");
+    // })
+    //     .catch(() => {
+    //         console.log("Okay")
+    //     })
     res.json(torrentState);
-
 })
 
 app.post('/addTorrent', (req, res) => {

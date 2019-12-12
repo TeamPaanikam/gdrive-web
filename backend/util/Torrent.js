@@ -11,88 +11,79 @@ exports.addTorrent = async (torrentId) => {
     return status;
 }
 
-exports.torrentState =  (torrentId) => {
-    // console.log("torrentID - " + torrentId);
-    var torrent = client.get(torrentId); 
-    console.log("torrent - "+ torrent);
+exports.torrentState = (torrentId) => {
+
+    var torrent = client.get(torrentId);
+    // console.log(torrent);
     return new Promise((resolve, reject) => {
-        if(!torrent){
+        if (!torrent) {
             resolve({
-                info : null,
-                error : true,
-                status : "not found"
-            })
+                info: null,
+                error: true,
+                status: "not found"
+            });
         }
 
-        torrent.on('error', () => {
-            console.log("err");
-            resolve({
-                info : null,
-                status : 'error',
-                error : true
-            })
-        })
-        torrent.on('metadata', () => {
-            console.log("meta");
+        function dwndin() {
+            resolve(
+                {
+                    info: fetchInfo(torrentId),
+                    status: "Downloading",
+                    error: "false"
+                }
+            );
+        }
 
+        function error() {
             resolve({
                 info: null,
-                status : 'metadata',
-                error : false
-            })
-        })
-        torrent.on('infoHash', () => {
-            console.log("infH");
+                status: 'error',
+                error: true
+            });
+        }
 
+        function metadata() {
             resolve({
                 info: null,
-                status : 'metadata',
-                error : false
-            })
-        })
-        torrent.on('ready', () => {
-            console.log("ready");
+                status: 'metadata',
+                error: false
+            });
+        }
 
+        function ready() {
             resolve({
-                info : null,
-                status : "ready",
-                error :false
-            })
-        })
-        torrent.on('done', () => {
-            console.log("Done");
+                info: null,
+                status: "ready",
+                error: false
+            });
+        }
+        function done() {
+            resolve({
+                info: fetchInfo(torrentId),
+                status: "done",
+                error: false
+            });
+        }
 
+        function nopeers() {
             resolve({
-                info : fetchInfo(torrentId),
-                status : "done",
-                error : false
-            })
-        })
-        torrent.on('noPeers', () =>{
-            console.log("noPEer");
-
-            resolve({
-                info: fetchInfo(torrentId), 
+                info: fetchInfo(torrentId),
                 status: "No Peers",
                 error: true
-            })
-        })
-        torrent.on('download', () =>{
-            console.log("Donwliad");
-            console.log(fetchInfo(torrentId))
+            });
+        }
 
-            resolve({
-                info : fetchInfo(torrentId),
-                status : "downloading",
-                error : false
-            })
-            
-        return;
-        })
+        torrent.on('download', dwndin);
+        torrent.on('error', error);
+        torrent.on('metadata', metadata);
+        torrent.on('ready', ready);
+        torrent.on('done', done);
+        torrent.on('noPeers', nopeers);
+
     })
 }
 
-function fetchInfo(torrentId){
+function fetchInfo(torrentId) {
     var torrent = client.get(torrentId);
     if (torrent) {
         let fileArr = [], i = 0;
@@ -112,7 +103,7 @@ function fetchInfo(torrentId){
             'ratio': torrent.ratio,
             'time': torrent.timeRemaining
         }
-        return torrentStatus
+        return torrentStatus;
     }
     return null;
 }
