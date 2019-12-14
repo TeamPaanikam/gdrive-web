@@ -3,36 +3,41 @@ import "./App.css";
 import Paper from "@material-ui/core/Paper";
 import { Typography } from "@material-ui/core";
 import axios from "axios";
-import { element } from "prop-types";
-class Status extends Component {
+export default class Status extends Component {
   state = {
     info: {
       files: {
         file: 0
       },
+      name: "Fetching, please wait...",
       progress: 0,
       downloadSpeed: 0,
       peers: 0,
       time: 0
     },
     status: "NA",
-    error: "na"
+    error: "NA"
   };
 
   componentDidMount = () => {
-    axios
-      .post(
-        "http://localhost:8000/fetchTorrentState",
-        { torrentId: localStorage.getItem("torrentId") },
-        { headers: { "Content-Type": "application/json" } }
-      )
-      .then(response => {
-        console.log(response.data);
-        this.setState(response.data);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    this.timer = setInterval(() => {
+      axios
+        .post(
+          "http://localhost:8000/fetchTorrentState",
+          { torrentId: localStorage.getItem("torrentId") },
+          { headers: { "Content-Type": "application/json" } }
+        )
+        .then(response => {
+          console.log(response.data);
+          this.setState(response.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 5000);
+  };
+  componentWillUnmount = () => {
+    clearInterval(this.timer);
   };
 
   render() {
@@ -46,7 +51,7 @@ class Status extends Component {
           alignItems: "center"
         }}
       >
-        <Paper>
+        <Paper elevation="18" style={{padding: "15px"}}>
           <Typography
             variant="h3"
             component="h3"
@@ -57,21 +62,22 @@ class Status extends Component {
           <hr />
 
           <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
-            Info:
+            Name: {this.state.info.name}
           </Typography>
           <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
-            Error: {this.state.error}
+            Error: {this.state.error.toString()}
           </Typography>
           <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
             Status: {this.state.status}
           </Typography>
           <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
-            {/* Progress:{this.state.info.progress} */}
+            Progress: {this.state.info.progress}%
+          </Typography>
+          <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
+            Download Speed: {this.state.info.downloadSpeed}
           </Typography>
         </Paper>
       </div>
     );
   }
 }
-
-export default Status;

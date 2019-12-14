@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path')
 const PORT = process.env.PORT || 8000;
+const util = require('util');
 
 const torrent = require('./util/Torrent');
 app.use(cors());
@@ -21,7 +22,7 @@ app.post("/fetchTorrentState", async(req, res) => {
     console.log(req.body);
     var torrentState = await torrent.torrentState(req.body.torrentId)
     console.log("from index.js" );
-    console.log(torrentState);
+    console.log(util.inspect(torrentState, false, null, true));
     res.json(torrentState);
 })
 

@@ -4,7 +4,7 @@ import './App.css';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-class Body extends Component {
+export default class Body extends Component {
     render() {
         return (
             <div className="Body" style={{ display: "flex", height: "80vh", margin: "auto", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
@@ -30,8 +30,6 @@ function Click() {
         console.log(response.data);
     })
     .catch(function (error){
-        console.log("some error occured");
+        console.log(error);
     });
 }
-
-export default Body;

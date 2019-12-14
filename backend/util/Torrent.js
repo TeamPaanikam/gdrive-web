@@ -103,14 +103,12 @@ exports.torrentState = torrentId => {
           status: "ready",
           error: false
         });
-    }
-    else{
+    } else {
       resolve({
         info: null,
         status: "!ready",
         error: false
       });
-
     }
   });
 };
@@ -130,8 +128,9 @@ function fetchInfo(torrentId) {
     }
     var torrentStatus = {
       files: fileArr,
+      name: torrent.name,
       progress: torrent.progress * 100,
-      downloadSpeed: torrent.downloadSpeed,
+      downloadSpeed: torrent.downloadSpeed/1000 + " kBps",
       peers: torrent.numPeers,
       ratio: torrent.ratio,
       time: torrent.timeRemaining
