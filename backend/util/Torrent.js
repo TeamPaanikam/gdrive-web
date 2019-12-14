@@ -28,7 +28,6 @@ exports.torrentState = torrentId => {
         status: "not found"
       });
     }
-
     // function dwndin() {
     //   resolve({
     //     info: fetchInfo(torrentId),
@@ -86,30 +85,32 @@ exports.torrentState = torrentId => {
           status: "downloading",
           error: false
         });
+      } else if (torrent.done) {
+        resolve({
+          info: fetchInfo(torrentId),
+          status: "done",
+          error: false
+        });
+      } else if (torrent.numPeers == 0) {
+        resolve({
+          info: fetchInfo(torrentId),
+          status: "No Peers",
+          error: true
+        });
       } else
         resolve({
-          info: null,
+          info: fetchInfo(torrentId),
           status: "ready",
           error: false
         });
-    } else if (torrent.done) {
+    }
+    else{
       resolve({
-        info: fetchInfo(torrentId),
-        status: "done",
+        info: null,
+        status: "!ready",
         error: false
       });
-    } else if (torrent.numPeers == 0) {
-      resolve({
-        info: fetchInfo(torrentId),
-        status: "No Peers",
-        error: true
-      });
-    } else if (torrent.downloadSpeed > 0) {
-      resolve({
-        info: fetchInfo(torrentId),
-        status: "downloading",
-        error: false
-      });
+
     }
   });
 };
