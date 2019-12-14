@@ -82,13 +82,13 @@ exports.torrentState = torrentId => {
       if (torrent.downloadSpeed > 0) {
         resolve({
           info: fetchInfo(torrentId),
-          status: "downloading",
+          status: "Downloading",
           error: false
         });
       } else if (torrent.done) {
         resolve({
           info: fetchInfo(torrentId),
-          status: "done",
+          status: "Downloaded",
           error: false
         });
       } else if (torrent.numPeers == 0) {
@@ -100,13 +100,13 @@ exports.torrentState = torrentId => {
       } else
         resolve({
           info: fetchInfo(torrentId),
-          status: "ready",
+          status: "Ready",
           error: false
         });
     } else {
       resolve({
         info: null,
-        status: "!ready",
+        status: "!Ready",
         error: false
       });
     }
@@ -130,7 +130,7 @@ function fetchInfo(torrentId) {
       files: fileArr,
       name: torrent.name,
       progress: torrent.progress * 100,
-      downloadSpeed: torrent.downloadSpeed/1000 + " kBps",
+      downloadSpeed: ((torrent.downloadSpeed/1000>1000)?((torrent.downloadSpeed/1000000).toFixed(2) + " mBps"):((torrent.downloadSpeed/1000).toFixed(2) + " kBps")),
       peers: torrent.numPeers,
       ratio: torrent.ratio,
       time: torrent.timeRemaining

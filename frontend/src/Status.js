@@ -71,7 +71,7 @@ export default class Status extends Component {
             Status: {this.state.status}
           </Typography>
           <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
-            Progress: {this.state.info.progress}%
+            Progress: {Number(this.state.info.progress).toFixed(2)}%
           </Typography>
           <Typography variant="h5" component="h5" style={{ textAlign: "left" }}>
             Download Speed: {this.state.info.downloadSpeed}
