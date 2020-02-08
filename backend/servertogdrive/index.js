@@ -1,6 +1,4 @@
-
 //64548829595-htbn3s8lkan2oj82l4nk5p8rpfqevpmq.apps.googleusercontent.com  client id
-
 //giDe_h3pVrF1zSrNQu5EbF0x  client secret
 const fs = require('fs');
 const readline = require('readline');
@@ -112,5 +110,4 @@ function uploadFile(auth) {
                 console.log('File Id: ', res.data.id);
          }
     });
-}
-  
+}  
