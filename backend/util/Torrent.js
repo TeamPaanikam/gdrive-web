@@ -1,5 +1,7 @@
 const webTorrent = require("webtorrent");
 const client = new webTorrent();
+const Gdrive = require('./GDrive');
+
 
 exports.addTorrent = async torrentId => {
   var status = false;
@@ -28,56 +30,6 @@ exports.torrentState = torrentId => {
         status: "not found"
       });
     }
-    // function dwndin() {
-    //   resolve({
-    //     info: fetchInfo(torrentId),
-    //     status: "Downloading",
-    //     error: "false"
-    //   });
-    // }
-    // function error() {
-    //   resolve({
-    //     info: null,
-    //     status: "error",
-    //     error: true
-    //   });
-    // }
-    // function metadata() {
-    //   resolve({
-    //     info: null,
-    //     status: "metadata",
-    //     error: false
-    //   });
-    // }
-    // function ready() {
-    //   resolve({
-    //     info: null,
-    //     status: "ready",
-    //     error: false
-    //   });
-    // }
-    // function done() {
-    //   resolve({
-    //     info: fetchInfo(torrentId),
-    //     status: "done",
-    //     error: false
-    //   });
-    // }
-    // function nopeers() {
-    //   resolve({
-    //     info: fetchInfo(torrentId),
-    //     status: "No Peers",
-    //     error: true
-    //   });
-    // }
-
-    // torrent.once("ready", ready);
-    // torrent.once("download", dwndin);
-    // torrent.once("error", error);
-    // torrent.once("metadata", metadata);
-    // torrent.once("done", done);
-    // torrent.once("noPeers", nopeers);
-
     if (torrent.ready) {
       if (torrent.downloadSpeed > 0) {
         resolve({
@@ -113,21 +65,47 @@ exports.torrentState = torrentId => {
   });
 };
 
+exports.uploadToDrive = torrentID => {
+  var torrent = client.get(torrentID);
+  if(!torrent){
+    console.log("Torrent does not exist");
+    return 404;
+  }
+  else{
+    while(!torrent.done){
+      console.log("Still downloading");
+    }
+
+    if(torrent.done){
+      // torrent is done downloading, needs to be uploaded to the drive and removed from the client altogether.
+      /*  TODO: organise per-file basis with apt paths, for now, just creating one single folder in the drive and dumping all the files/. */
+      
+      // Create folder in gdrive
+
+      let folder = {
+        name:"testFolder"
+      }
+
+      let folderStatus = Gdrive.createFolder( folder);
+      console.log(folderStatus);
+
+
+      //upload each file one by one..
+      
+      for (i=0;i<torrent.files.length;i++){
+          console.log("File uploadss");
+          
+      }
+    }
+  }
+
+}
+
 function fetchInfo(torrentId) {
   var torrent = client.get(torrentId);
   if (torrent) {
-    let fileArr = [],
-      i = 0;
-    for (file in torrent.files) {
-      fileArr[i] = {
-        name: file.name,
-        size: file.size,
-        progress: file.progress * 100
-      };
-      i++;
-    }
     var torrentStatus = {
-      files: fileArr,
+      files: torrent.files.length,
       name: torrent.name,
       progress: torrent.progress * 100,
       downloadSpeed: ((torrent.downloadSpeed/1000>1000)?((torrent.downloadSpeed/1000000).toFixed(2) + " mBps"):((torrent.downloadSpeed/1000).toFixed(2) + " kBps")),
