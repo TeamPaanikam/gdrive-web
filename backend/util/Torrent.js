@@ -65,7 +65,7 @@ exports.torrentState = torrentId => {
   });
 };
 
-exports.uploadToDrive = torrentID => {
+exports.uploadToDrive =  torrentID => {
   var torrent = client.get(torrentID);
   if(!torrent){
     console.log("Torrent does not exist");
@@ -82,20 +82,27 @@ exports.uploadToDrive = torrentID => {
       
       // Create folder in gdrive
 
-      let folder = {
-        name:"testFolder"
+      const folder = {
+        "name":"myFolder"
       }
+      
 
-      let folderStatus = Gdrive.createFolder( folder);
+      var folderStatus =  Gdrive.createFolder(folder);
+      console.log("folder id in torrent js:");
       console.log(folderStatus);
-
 
       //upload each file one by one..
       
-      for (i=0;i<torrent.files.length;i++){
-          console.log("File uploadss");
-          
-      }
+      // for (i=0;i<torrent.files.length;i++){
+      //     console.log("File uploadss");
+      //     Gdrive.uploadToFolder({
+      //       file:{
+      //         name:"nirmesh"
+      //       },
+      //       folder: {
+      //       }
+      //     })
+      // }
     }
   }
 
