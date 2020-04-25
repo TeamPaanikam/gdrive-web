@@ -65,7 +65,7 @@ exports.torrentState = torrentId => {
   });
 };
 
-exports.uploadToDrive =  torrentID => {
+exports.uploadToDrive =  async torrentID => {
   var torrent = client.get(torrentID);
   if(!torrent){
     console.log("Torrent does not exist");
@@ -78,31 +78,38 @@ exports.uploadToDrive =  torrentID => {
 
     if(torrent.done){
       // torrent is done downloading, needs to be uploaded to the drive and removed from the client altogether.
+      
       /*  TODO: organise per-file basis with apt paths, for now, just creating one single folder in the drive and dumping all the files/. */
       
       // Create folder in gdrive
-
+      
       const folder = {
-        "name":"myFolder"
+        "name": torrent.name
       }
       
 
-      var folderStatus =  Gdrive.createFolder(folder);
+      var folderStatus = await Gdrive.createFolder(folder);
       console.log("folder id in torrent js:");
       console.log(folderStatus);
 
-      //upload each file one by one..
+      // upload each file one by one..
       
-      // for (i=0;i<torrent.files.length;i++){
-      //     console.log("File uploadss");
-      //     Gdrive.uploadToFolder({
-      //       file:{
-      //         name:"nirmesh"
-      //       },
-      //       folder: {
-      //       }
-      //     })
-      // }
+      for (i=0;i<torrent.files.length;i++){
+          
+          console.log("File uploadss");
+          console.log(torrent.files[i].name);
+          console.log(torrent.files[i].path);
+
+          Gdrive.uploadToFolder({
+            file:{
+              name:torrent.files[i].name,
+              path:torrent.files[i].path
+            },
+            folder: {
+              id:folderStatus
+            }
+          })
+      }
     }
   }
 

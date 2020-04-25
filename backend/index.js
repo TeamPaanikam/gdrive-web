@@ -40,7 +40,7 @@ app.post("/addTorrent", (req, res) => {
 app.post("/toDrive", (req, res) =>{
   console.log(req.body);
   let status = torrent.uploadToDrive(req.body.torrentId);
-  console.log(status);
+  // console.log(status);
   res.sendStatus(202);
 });
 
