@@ -19,7 +19,7 @@
   "homepage": "https://github.com/TeamPaanikam/gdrive-web#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "express-handlebars": "^3.1.0",
     "googleapis": "^39.2.0",
     "webtorrent": "^0.105.1"
